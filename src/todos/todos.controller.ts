@@ -11,6 +11,7 @@ import {
   Delete,
   Request,
   UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -43,6 +44,16 @@ export class TodosController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return this.todosService.delete(Number(id));
+    await this.todosService.delete(Number(id));
+    return { message: 'Todo deletado com sucesso' };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    if (!req.user) {
+      throw new UnauthorizedException('Usuário não autenticado');
+    }
+    return req.user;
   }
 }

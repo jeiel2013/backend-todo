@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/require-await */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -11,7 +7,7 @@ export class TodosService {
 
   async create(userId: number, title: string) {
     return this.prisma.todo.create({
-      data: { title, userId },
+      data: { title, user: { connect: { id: userId } } },
     });
   }
 
